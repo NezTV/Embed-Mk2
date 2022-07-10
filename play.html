@@ -12,10 +12,24 @@
                 }
             };
 
+            function makeError(text = "Your browser does not support playing this, sorry :(") {
+                var error = document.getElementById("error");
+                error.innerHTML = text;
+                error.removeAttribute("style");
+            }
+
             document.addEventListener("DOMContentLoaded", function() {
-                var id = document.referrer.replace("-", ".").split(".");
-                var chId = id[id.length - 2];
                 var video = document.getElementById("video");
+                var params = new URL(document.URL).searchParams;
+                if (!params.has("c")) {
+                    video.remove();
+                    return makeError("No \"c\" parameter.");
+                }
+                var chId = params.get("c");
+                if (!Object.keys(streams).includes(chId)) {
+                    video.remove();
+                    return makeError("Invalid \"c\" parameter.");
+                }
                 if (Hls.isSupported()) {
                     var hls = new Hls();
                     hls.loadSource(streams[chId].url);
@@ -32,14 +46,14 @@
                 }
                 else {
                     video.remove();
-                    document.getElementById("error").removeAttribute("style");
+                    makeError();
                 }
             });
             // @license-end
         </script>
     </head>
     <body>
-        <h1 id="error" style="display: none;">Your browser does not support playing this, sorry :(</h1>
+        <h1 id="error" style="display: none;"></h1>
         <video id="video" controls muted></video>
         <a style="display: none;" data-jslicense="1" href="assets/licenses.html">licenses</a>
     </body>
