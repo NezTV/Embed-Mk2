@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NezTV embed</title>
+        <link rel="stylesheet" href="assets/style.css"/>
+        <script src="assets/hls.js"></script>
+        <script>
+            // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-v3-or-Later
+            var streams = {
+                "1": {
+                    "url": "http://agrtv-hls.damaj.gq/playlist.m3u8"
+                }
+            };
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var id = document.referrer.replace("-", ".").split(".");
+                var chId = id[id.length - 2];
+                var video = document.getElementById("video");
+                if (Hls.isSupported()) {
+                    var hls = new Hls();
+                    hls.loadSource(streams[chId].url);
+                    hls.on(Hls.Events.MEDIA_ATTACHED, function() {
+                        video.play();
+                    });
+                    hls.attachMedia(video);
+                }
+                else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+                    video.src = streams[chId].url;
+                    video.addEventListener("canplay", function() {
+                        video.play();
+                    });
+                }
+                else {
+                    video.remove();
+                    document.getElementById("error").removeAttribute("style");
+                }
+            });
+            // @license-end
+        </script>
+    </head>
+    <body>
+        <h1 id="error" style="display: none;">Your browser does not support playing this, sorry :(</h1>
+        <video id="video" controls muted></video>
+        <a style="display: none;" data-jslicense="1" href="assets/licenses.html">licenses</a>
+    </body>
+</html>

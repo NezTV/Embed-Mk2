@@ -1,0 +1,44 @@
+html {
+    background-color: black;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+p, video, a[data-jslicense="1"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+p {
+    color: white;
+    margin: 0.5em;
+    font-size: large;
+}
+
+a {
+    display: block;
+    width: 100px;
+    height: 100px;
+    background-image: url("button_play.png");
+}
+
+span {
+    position: absolute;
+    bottom: 0.5em;
+    right: 0.5em;
+}
+
+span::after {
+    color: white;
+    opacity: 0.5;
+    content: "Note: JS will be loaded when you press the play button!";
+}
+
+video {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
